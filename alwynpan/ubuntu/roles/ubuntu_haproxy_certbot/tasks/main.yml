@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Add apt repository for HAProxy
+  become: true
+  ansible.builtin.apt_repository:
+    repo: ppa:vbernat/haproxy-{{ haproxy_version }}
+
+- name: Install haproxy
+  become: true
+  ansible.builtin.apt:
+    name: ["haproxy={{ haproxy_version }}.*"]
+    install_recommends: false
+    update_cache: true
+
+- name: Install certbot
+  become: true
+  community.general.snap:
+    name: certbot
+    classic: true
+
+- name: Create dhparam file
+  become: true
+  ansible.builtin.get_url:
+    url: https://ssl-config.mozilla.org/ffdhe2048.txt
+    dest: "{{ letsencrypt_haproxy_cert_dir }}/dhparam.pem"
+    mode: "0400"
+
+- name: Configure haproxy for letsencrypt
+  become: true
+  ansible.builtin.template:
+    src: haproxy-letsencrypt.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    backup: true
+    mode: "0644"
+  notify:
+    - Restart haproxy

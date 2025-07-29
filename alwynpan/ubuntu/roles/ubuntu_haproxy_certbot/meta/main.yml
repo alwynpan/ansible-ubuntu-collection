@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: MIT-0
+galaxy_info:
+  author: alwynpan
+  description: Ansible role for installing and configuring HAProxy and Certbot on Ubuntu systems with Let's Encrypt SSL.
+  company: alwynpan
+  issue_tracker_url: https://github.com/alwynpan/ansible-ubuntu-collection/issues
+  license: MIT
+  min_ansible_version: "2.9"
+
+  galaxy_tags:
+    - ubuntu
+    - haproxy
+    - certbot
+    - letsencrypt
+    - ssl
+    - reverseproxy
+    - automation
+    - devops
+
+dependencies: []

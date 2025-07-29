@@ -1,0 +1,5 @@
+.vscode
+
+.ansible/.lock
+
+alwynpan/ubuntu/alwynpan-ubuntu-*.tar.gz

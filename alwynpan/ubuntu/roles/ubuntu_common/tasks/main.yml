@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Gather facts of remote host
+  ansible.builtin.setup:
+    gather_subset: all
+
+- name: Upgrade all packages to latest version
+  become: true
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    update_cache: true
+    autoremove: true
+
+- name: Install dependencies
+  become: true
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - build-essential
+      - ca-certificates
+      - curl
+      - git
+      - lsb-release
+      - lvm2
+      - pipx
+      - python3-dev
+      - python3-pip
+      - python3-setuptools
+      - python3-virtualenv
+      - snapd
+      - software-properties-common
+      - ubuntu-advantage-tools
+      - unzip
+      - vim
+    state: latest
+    install_recommends: false
+    update_cache: true
+
+- name: Set timezone
+  become: true
+  community.general.timezone:
+    name: "{{ item.timezone | default('Etc/UTC') }}"
+  loop: "{{ instances }}"
+
+- name: Check if systemd-timesyncd is running
+  become: true
+  ansible.builtin.command: systemctl status systemd-timesyncd
+  register: timesyncd_status
+  ignore_errors: true
+  changed_when: false
+
+- name: Set NTP configuration in /etc/systemd/timesyncd.conf
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/systemd/timesyncd.conf
+    backup: true
+    create: true
+    insertafter: '\[Time\]'
+    regexp: "^NTP="
+    line: NTP=ntp.unimelb.edu.au ntp2.unimelb.edu.au
+    state: present
+    mode: '0644'
+  when: timesyncd_status is not search("condition failed")
+  notify:
+    - Reload set-ntp
+    - Restart timesyncd
+    - Maintain RTC in UTC
+
+- name: Install "aws-cli"
+  become: true
+  community.general.snap:
+    name: aws-cli
+    channel: v2/stable
+    classic: true

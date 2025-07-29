@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: MIT-0
+galaxy_info:
+  author: alwynpan
+  description: Common Ubuntu system configuration and package management.
+  company: alwynpan
+  issue_tracker_url: https://github.com/alwynpan/ansible-ubuntu-collection/issues
+  license: MIT
+  min_ansible_version: "2.9"
+
+  galaxy_tags:
+    - ubuntu
+    - system
+    - configuration
+    - packages
+    - timezone
+    - ntp
+    - aws
+    - common
+
+dependencies: []

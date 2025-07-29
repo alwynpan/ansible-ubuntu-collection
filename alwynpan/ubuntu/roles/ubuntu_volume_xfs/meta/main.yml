@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: MIT-0
+galaxy_info:
+  author: alwynpan
+  description: Ansible role for managing and formatting XFS volumes on Ubuntu systems.
+  company: alwynpan
+  issue_tracker_url: https://github.com/alwynpan/ansible-ubuntu-collection/issues
+  license: MIT
+  min_ansible_version: "2.9"
+
+  galaxy_tags:
+    - ubuntu
+    - xfs
+    - volume
+    - disk
+    - storage
+    - filesystem
+    - automation
+    - devops
+
+dependencies: []

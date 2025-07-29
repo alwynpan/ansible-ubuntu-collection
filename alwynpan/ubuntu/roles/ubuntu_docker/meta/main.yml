@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: MIT-0
+galaxy_info:
+  author: alwynpan
+  description: Ansible role for installing and configuring Docker on Ubuntu systems.
+  company: alwynpan
+  issue_tracker_url: https://github.com/alwynpan/ansible-ubuntu-collection/issues
+  license: MIT
+  min_ansible_version: "2.9"
+
+  galaxy_tags:
+    - ubuntu
+    - docker
+    - containers
+    - system
+    - configuration
+    - automation
+    - devops
+
+dependencies: []

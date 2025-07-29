@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Install dependencies
+  become: true
+  ansible.builtin.apt:
+    name: "xfsprogs"
+    state: latest
+    install_recommends: false
+    update_cache: true
+
+- name: Make file system
+  become: true
+  community.general.filesystem:
+    fstype: xfs
+    dev: "{{ item.1.device }}"
+  when: item.1.device is defined and item.1.mountpoint is defined and inventory_hostname == item.0.name
+  loop: "{{ lookup('subelements', instances, 'volumes', {'skip_missing': True}) }}"
+
+- name: Create directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.1.mountpoint }}"
+    recurse: true
+    state: directory
+  when: item.1.mountpoint is defined and inventory_hostname == item.0.name
+  loop: "{{ lookup('subelements', instances, 'volumes', {'skip_missing': True}) }}"
+
+- name: Mount device
+  become: true
+  ansible.posix.mount:
+    path: "{{ item.1.mountpoint }}"
+    src: "{{ item.1.device }}"
+    fstype: xfs
+    state: mounted
+  when: item.1.device is defined and item.1.mountpoint is defined and inventory_hostname == item.0.name
+  loop: "{{ lookup('subelements', instances, 'volumes', {'skip_missing': True}) }}"
